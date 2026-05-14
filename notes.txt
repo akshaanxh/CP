@@ -1,2 +1,236 @@
 1. In cpp you can directly compare strings
 
+2. 
+===============================================================================
+                    IMPORTANT CONCEPTS USED
+===============================================================================
+
+------------------------------------------------------------------------------
+1. CHARACTERS ARE INTERNALLY NUMBERS (ASCII)
+------------------------------------------------------------------------------
+
+In C++, characters are internally stored as numbers using ASCII values.
+
+Examples:
+
+    'A' = 65
+    'B' = 66
+    'C' = 67
+
+    'a' = 97
+    'b' = 98
+
+Because ASCII values are consecutive:
+
+    A B C D E ...
+    65 66 67 68 ...
+
+we can perform arithmetic on characters.
+
+
+------------------------------------------------------------------------------
+2. WHY THIS WORKS:
+------------------------------------------------------------------------------
+
+    char ch = i + 'A';
+
+Example:
+
+    i = 2
+
+Then:
+
+    2 + 'A'
+    = 2 + 65
+    = 67
+    = 'C'
+
+So:
+    ch becomes 'C'
+
+
+------------------------------------------------------------------------------
+3. CHARACTER TO INDEX CONVERSION
+------------------------------------------------------------------------------
+
+    ch - 'A'
+
+Example:
+
+    'C' - 'A'
+    = 67 - 65
+    = 2
+
+This is used for frequency arrays.
+
+Example:
+
+    freq[ch - 'A']++
+
+So:
+    freq[0] -> frequency of A
+    freq[1] -> frequency of B
+    freq[2] -> frequency of C
+
+
+===============================================================================
+                    PALINDROME REORDER LOGIC
+===============================================================================
+
+------------------------------------------------------------------------------
+1. PALINDROME PROPERTY
+------------------------------------------------------------------------------
+
+A palindrome reads same forward and backward.
+
+Structure:
+
+    LEFT + MIDDLE + REVERSE(LEFT)
+
+Example:
+
+    ABC + D + CBA
+    = ABCDCBA
+
+
+------------------------------------------------------------------------------
+2. PALINDROME FREQUENCY RULE
+------------------------------------------------------------------------------
+
+For palindrome to exist:
+
+    At most ONE character
+    can have odd frequency.
+
+Even length palindrome:
+    all frequencies even
+
+Odd length palindrome:
+    exactly one odd frequency allowed
+
+
+------------------------------------------------------------------------------
+3. CONSTRUCTION LOGIC
+------------------------------------------------------------------------------
+
+Step 1:
+    Count frequency of every character
+
+Example:
+
+    AAAACACBA
+
+Frequencies:
+
+    A = 6
+    B = 1
+    C = 2
+
+
+------------------------------------------------------------------------------
+4. BUILD LEFT HALF
+------------------------------------------------------------------------------
+
+Code:
+
+    left += string(freq[i] / 2, ch);
+
+Suppose:
+
+    A frequency = 6
+
+Then:
+
+    freq[i] / 2
+    = 6 / 2
+    = 3
+
+So:
+
+    string(3, 'A')
+
+creates:
+
+    "AAA"
+
+which gets added to LEFT.
+
+
+------------------------------------------------------------------------------
+5. BUILD MIDDLE
+------------------------------------------------------------------------------
+
+Code:
+
+    if(freq[i] % 2 != 0)
+
+If character frequency is odd:
+    one character goes to middle.
+
+Example:
+
+    B frequency = 1
+
+Then:
+
+    middle += 'B'
+
+Middle becomes:
+
+    B
+
+
+------------------------------------------------------------------------------
+6. BUILD RIGHT HALF
+------------------------------------------------------------------------------
+
+Right side is simply reverse of LEFT.
+
+Code:
+
+    right = left;
+    reverse(right.begin(), right.end());
+
+Example:
+
+    LEFT = AAAC
+
+Then:
+
+    RIGHT = CAAA
+
+
+------------------------------------------------------------------------------
+7. FINAL PALINDROME
+------------------------------------------------------------------------------
+
+Final Answer:
+
+    LEFT + MIDDLE + RIGHT
+
+Example:
+
+    AAAC + B + CAAA
+
+Result:
+
+    AAACBCAAA
+
+
+------------------------------------------------------------------------------
+8. IMPORTANT INSIGHT
+------------------------------------------------------------------------------
+
+We do NOT manually build both halves separately.
+
+We only:
+    - build LEFT
+    - build MIDDLE
+
+RIGHT is automatically created using:
+
+    reverse(LEFT)
+
+This guarantees palindrome symmetry automatically.
+
+===============================================================================
